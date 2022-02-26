@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Customer;
-use View;
-use Validator;
-use Redirect;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Redirect;
 
 class CustomerController extends Controller
 {
@@ -19,7 +19,7 @@ class CustomerController extends Controller
     {
         // $customers = Customer::orderBy('id','DESC')->get();
         // $customers = Customer::orderBy('id','DESC')->paginate(10);
-        $customers = Customer::withTrashed()->orderBy('id','DESC')->paginate(10);
+        $customers = Customer::withTrashed()->orderBy('id','DESC')->paginate(1);
         // dd($customers);
         return View::make('customer.index',compact('customers'));
     }

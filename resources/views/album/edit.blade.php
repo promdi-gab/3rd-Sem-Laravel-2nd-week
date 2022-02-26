@@ -10,7 +10,7 @@
 </div> 
   <div class="form-group"> 
     <label for="artist" class="control-label">Artist</label>
-    <input type="text" class="form-control " id="artist" name="artist" value="{{$album->artist}}" ></text>
+    <input type="text" class="form-control " id="artist" name="artist" value="{{$album->artist}}" >
   </div> 
   <div class="form-group"> 
     <label for="genre" class="control-label">Genre</label>

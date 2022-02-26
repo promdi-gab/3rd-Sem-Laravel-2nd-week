@@ -20,6 +20,7 @@ class customer extends Model
                     'phone'=>'numeric',
                     'town'=>'required',
                     'zipcode'=>'required'];
+                    
     public static $messages = [
             'required' => 'Ang :attribute field na ito ay kailangan',
             'min' => 'masyadong maigsi ang :attribute',
