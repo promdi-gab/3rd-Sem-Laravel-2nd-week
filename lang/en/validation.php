@@ -68,6 +68,7 @@ return [
     'ip' => 'The :attribute must be a valid IP address.',
     'ipv4' => 'The :attribute must be a valid IPv4 address.',
     'ipv6' => 'The :attribute must be a valid IPv6 address.',
+    'mac_address' => 'The :attribute must be a valid MAC address.',
     'json' => 'The :attribute must be a valid JSON string.',
     'lt' => [
         'numeric' => 'The :attribute must be less than :value.',
@@ -81,7 +82,6 @@ return [
         'string' => 'The :attribute must be less than or equal to :value characters.',
         'array' => 'The :attribute must not have more than :value items.',
     ],
-    'mac_address' => 'The :attribute must be a valid MAC address.',
     'max' => [
         'numeric' => 'The :attribute must not be greater than :max.',
         'file' => 'The :attribute must not be greater than :max kilobytes.',
@@ -108,7 +108,6 @@ return [
     'prohibits' => 'The :attribute field prohibits :other from being present.',
     'regex' => 'The :attribute format is invalid.',
     'required' => 'The :attribute field is required.',
-    'required_array_keys' => 'The :attribute field must contain entries for: :values.',
     'required_if' => 'The :attribute field is required when :other is :value.',
     'required_unless' => 'The :attribute field is required unless :other is in :values.',
     'required_with' => 'The :attribute field is required when :values is present.',
@@ -141,9 +140,31 @@ return [
     |
     */
 
-    'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        //GLOBAL VALIDATION IBIG SABIHEN PWEDE SA KAHIT ANUNG MODEL OR CONTROLLERS LIKE CUSTOMER,ALBUMS ETC 
+    'custom' => [ 
+        'title' => [
+            'required' => 'Title is required',
+            'alpha_num' => 'You can only put letters here',
+            'min' => 'Try again! Your name is too short',
+        ],
+        'lname' => [
+            'required' => 'Last name is required',
+            'alpha' => 'You can only put letters here',
+        ],
+        'fname' => [
+            'required' => 'First name is required',
+        ],
+        'address' => [
+            'required' => 'Address line is required',
+        ],
+        'phone' => [
+            'numeric' => 'Numbers is only allowed',
+        ],
+        'town' => [
+            'required' => 'Town is required',
+        ],
+        'zipcode' => [
+            'required' => 'Zip Code is required',
         ],
     ],
 

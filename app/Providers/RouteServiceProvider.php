@@ -26,7 +26,9 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string|null
      */
-     protected $namespace = 'App\\Http\\Controllers';
+     //Di gagana sa WEB.PHP pag naka comment ito nakita mo naman kanina diba nung cinomment ko toh error bwahahhhaha
+     protected $namespace = 'App\\Http\\Controllers';//kaya ko inuncomment ito kasi magkakaerror ka sa softdelete at hard delete
+     //explain ko sau mamaya 
 
     /**
      * Define your route model bindings, pattern filters, etc.
