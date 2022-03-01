@@ -20,8 +20,8 @@
     <thead>
 <tr>
         <th>Album ID</th>
-        <th>title</th>
-        <th>Artist</th>
+        <th>Album Name</th>
+        <th>Artist ID</th>
         <th>Action</th>
         {{-- <th>Genre</th>
         <th>Year</th> --}}
@@ -31,18 +31,28 @@
       @foreach($albums as $album)
       <tr>
           <td>{{$album->id}}</td>
-          <td>{{$album->title}}</td>
-          <td>{{$album->artist}}</td>
+          <td>{{$album->album_name}}</td>
+          {{-- <td>{{$album->artist_id}}</td> --}}
+          <td>{{$album->artist_name}}</td>
+         {{-- nakuha sya dun sa album controller using join and db facade --}}
+
           {{-- <td>{{$album->genre}}</td>
           <td>{{$album->year}}</td> --}}
           <td align="center"><a href="{{route('album.edit',$album->id)}}">
             <i class="fa-regular fa-pen-to-square" aria-hidden="true" style="font-size:24px" ></i></a>
           </td>
-          <td align="center"><a href="{{route('album.delete',$album->id)}}">
+
+          <td align="center">{!! Form::open(array('route' => array('album.destroy', $album->id),'method'=>'DELETE')) !!}
+            <button ><i class="fa-solid fa-trash-can" style="font-size:24px; color:red" ></i></button>
+            {!! Form::close() !!}
+            </td>
+
+          {{-- <td align="center"><a href="{{route('album.destroy',$album->id)}}">
             <i class="fa-solid fa-trash-can" style="font-size:24px; color:red" ></i></a>
-          </td>
+          </td> --}}
       </tr>
       @endforeach
+
     </tbody>
   </table>
 </div>

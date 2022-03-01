@@ -8,28 +8,26 @@
   @csrf  
   {{-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> --}}
 <div class="form-group">
-    <label for="title" class="control-label">Title</label>
-    <input type="text" class="form-control" id="title" name="title" >
+    <label for="album_name" class="control-label">Album Name</label>
+    <input type="text" class="form-control" id="album_name" name="album_name" >
   </div> 
 
 <div class="form-group">
     <label for="artist" class="control-label">Artist</label>
-    <input type="text" class="form-control " id="artist" name="artist">
-  </div> 
+    {{-- <input type="text" class="form-control " id="artist" name="artist"> --}}
 
-<div class="form-group"> 
-    <label for="genre" class="control-label">Genre</label>
-    <input type="text" class="form-control " id="genre" name="genre" >
-  </div>
+    {{-- fetch customer with dropdown --}}
+    
+      <select class="form-select" name="artist_id" id="artist_name">
+        @foreach($artists as $id => $artist)
+          <option value="{{$id}}">{{$artist}}</option>
+        @endforeach
+      </select>
+    </div>
 
-<div class="form-group"> 
-    <label for="year" class="control-label">Year</label>
-    <input type="text" class="form-control" id="year" name="year">
-  </div>
-
-<button type="submit" class="btn btn-primary">Save</button>
+<button type="submit" class="btn btn-primary"> Save </button>
   <a href="{{url()->previous()}}" class="btn btn-default" role="button">Cancel</a>
-  </div>     
+  </div>   
 </div>
 </form> 
 @endsection

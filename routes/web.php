@@ -31,9 +31,13 @@ Route::resource('customer', 'CustomerController');
 Route::get('/customer/restore/{id}',['uses' => 'CustomerController@restore','as' => 'customer.restore']);
 
 Route::get("/customer/forceDelete/{id}", ["uses" => "CustomerController@forceDelete", "as" => "customer.forceDelete",]);
-//testing bat dito id lang         anung id ayan id hindi sya customer_id ganun sira HAHAHAHHAHAHAHGHAHAHAHHAHAHAHAHAHHAHAHA HAHTHAABHAEHAHAAbtasdahsd
-//yawa ka syempre HAHAHAAHHAHAH kasi default id tawag pag url boset ka ag GASGASGGASG malamang lalagay mo sa url customer_id boset ka HAHAHHAHA
-//default yan a nakhah dhefault na yan bawal palitan baket di nakalagay dito si ano customer/edit ganun hay nako 
-//Kasi nga yung CRUD OR Resource AY IISA pinagsamang CREATE SHOW/READ UPDATE DELETE yan kaya no need na siya tawagin ahhh okokk
-//kaya nakahiwalay yung restore at forceDelete kasi di naman kasama yan sa CRUD duh getsfgets anu pa tanongwaka naa sure wala na?uu HASHAHSHA ill
-//just leave some notes ay save mo ay nvm notes muna ako then save github^^
+
+// default id 
+//Kasi nga yung CRUD OR Resource AY IISA pinagsamang CREATE SHOW/READ UPDATE DELETE yan kaya no need na siya tawagin
+//kaya nakahiwalay yung restore at forceDelete kasi di kasama yan sa CRUD 
+
+Route::resource('customer', 'CustomerController');
+Route::resource('album', 'AlbumController');
+Route::resource('artist', 'ArtistController');
+Route::resource('listener', 'ListenerController');
+

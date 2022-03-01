@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Album extends Model
+class listener extends Model
 {
     use HasFactory;
-    protected $fillable = ['album_name','artist_id'];
 }
