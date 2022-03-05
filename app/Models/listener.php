@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class listener extends Model
 {
     use HasFactory;
+    protected $fillable = ['listener_name'];
 }
