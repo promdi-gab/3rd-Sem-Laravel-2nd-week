@@ -21,8 +21,10 @@
 <tr>
         <th>Album ID</th>
         <th>Album Name</th>
-        <th>Artist ID</th>
+        <th>Artist Name</th>
+        <th>Album cover</th>
         <th>Action</th>
+      
         {{-- <th>Genre</th>
         <th>Year</th> --}}
         </tr>
@@ -35,6 +37,8 @@
           {{-- <td>{{$album->artist_id}}</td> --}}
           <td>{{$album->artist_name}}</td>
          {{-- nakuha sya dun sa album controller using join and db facade --}}
+
+         <td><img src="{{ asset($album->img_path) }}" /></td>
 
           {{-- <td>{{$album->genre}}</td>
           <td>{{$album->year}}</td> --}}

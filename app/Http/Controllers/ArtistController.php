@@ -22,7 +22,7 @@ class ArtistController extends Controller
         $artists = DB::table('artists')
         ->leftJoin('albums','artists.id','=','albums.artist_id')
         //kasi nasa left?
-        ->select('artists.id','albums.album_name','artists.artist_name')
+        ->select('artists.id','albums.album_name','artists.artist_name', 'artists.img_path')
         //kaya nagseselect para di malito si laravel sa id(specify mo), kasi ambigous na yun
         //sa artists id kukunin yung id hindi sa fk
         ->get();
@@ -47,12 +47,36 @@ class ArtistController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
     public function store(Request $request)
     {
         //
+        // $input = $request->all();
+        // Artist::create($input);
+        // return Redirect::to('artist/index');
+
+        // $input = $request->all();
+       
         $input = $request->all();
-        Artist::create($input);
-        return Redirect::to('artist/index');
+        $request->validate([
+            'image' => 'mimes:jpeg,png,jpg,gif,svg',
+        ]);
+
+        if($file = $request->hasFile('image')) {
+            
+            $file = $request->file('image') ;
+            $fileName = uniqid().'_'.$file->getClientOriginalName();
+            // $fileName = $file->getClientOriginalName();
+            // dd($fileName);
+            $request->image->storeAs('images', $fileName, 'public');
+            //
+
+            $input['img_path'] = 'images/'.$fileName;
+            $Artist = Artist::create($input);
+            // $file->move($destinationPath,$fileName);
+        }
+
+        return Redirect::to('artist');
     }
 
     /**

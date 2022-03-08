@@ -7,6 +7,8 @@ use App\Models\Customer; //tinawag via model
 use Illuminate\Support\Facades\View; //ginagamit ito para tawagin extension na ito
 use Illuminate\Support\Facades\Validator;// same dito
 use Illuminate\Support\Facades\Redirect;// and dito
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class CustomerController extends Controller
 {
@@ -61,6 +63,13 @@ class CustomerController extends Controller
         }
             Customer::create($request->all());
             return Redirect::to('customer')->with('success','New Customer added!');
+
+            $path = Storage::putFileAs('images/customer', $request->file('image'),$request->file('image')->getClientOriginalName());
+        //storage folder na sya mapupunta hindi na public
+        
+            // dd($path);
+        
+            $request->merge(["img_path"=>$request->file('image')->getClientOriginalName()]);
 
     }
 

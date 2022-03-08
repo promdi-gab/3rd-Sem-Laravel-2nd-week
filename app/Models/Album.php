@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Album extends Model
 {
     use HasFactory;
-    protected $fillable = ['album_name','artist_id'];
+    protected $fillable = ['album_name','artist_id', 'img_path'];
 }

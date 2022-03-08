@@ -1,4 +1,6 @@
+
 @extends('layouts.base')
+@include('layouts.app')
 @section('body')
 <div class="container">
    <ul class="errors">
@@ -7,8 +9,12 @@
  @endforeach
  </ul>
   <h2>Create new Customer</h2>
-  <form method="POST" action="{{route('customer.store')}}" > {{-- akin"/customer" gets mo toh diba?para sa n yung ,store wala alng? no--}} 
-  @csrf
+  {{-- <form method="POST" action="{{route('customer.store')}}" > {{-- akin"/customer" gets mo toh diba?para sa n yung ,store wala alng? no--}} 
+  {{-- @csrf --}} 
+
+  <form method="post" action="{{route('customer.store')}}" enctype="multipart/form-data" >
+    @csrf
+
   <div class="form-group">
     <label for="title" class="control-label">Title</label> {{-- Yung old para bumalik yung nilagay mo pag may error  --}}
     <input type="text" class="form-control" id="title" name="title" value="{{old('title')}}">@if($errors->has('title'))
@@ -51,6 +57,14 @@
     <small>{{ $errors->first('phone') }}</small>
    @endif 
   </div>
+  <div class="form-group">
+    <label for="image" class="control-label">Customer Image</label>
+    <input type="file" class="form-control" id="image" name="image" >
+    @error('image')
+    <div class="alert alert-danger">{{ $message }}</div>
+    @enderror
+  </div>
+
 <button type="submit" class="btn btn-primary">Save</button>
   <a href="{{url()->previous()}}" class="btn btn-default" role="button">Cancel</a> {{-- Kung anu previoue url na gamit mo dun ka babalik --}}
   </div>     

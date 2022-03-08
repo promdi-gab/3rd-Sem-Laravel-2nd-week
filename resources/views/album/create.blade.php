@@ -4,7 +4,9 @@
   <h2>Create new album</h2>
   {{-- <form method="post" action="{{url('store')}}" > --}}
   {{-- <form method="post" action="{{url('')}}" > --}}
-  <form method="post" action="{{route('album.store')}}" >
+    <form method="post" action="{{route('album.store')}}" enctype="multipart/form-data">
+
+  {{-- <form method="post" action="{{route('album.store')}}" > --}}
   @csrf  
   {{-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> --}}
 <div class="form-group">
@@ -24,6 +26,15 @@
         @endforeach
       </select>
     </div>
+    
+    <div class="form-group">
+      <label for="image" class="control-label">Album Cover</label>
+      <input type="file" class="form-control" id="image" name="image" >
+
+       @error('image') {{-- kapag may error  --}}
+      <div class="alert alert-danger">{{ $message }}</div>
+      @enderror
+    </div> 
 
 <button type="submit" class="btn btn-primary"> Save </button>
   <a href="{{url()->previous()}}" class="btn btn-default" role="button">Cancel</a>

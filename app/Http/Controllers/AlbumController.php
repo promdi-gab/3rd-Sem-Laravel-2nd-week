@@ -59,9 +59,43 @@ class AlbumController extends Controller
     //====================================
     //option3
         //dd($request->all());
-        $input = $request->all(); //returning value is array
-        Album::create($input);
-        return Redirect::to('/album')->with('success','New Album Added');
+        // $input = $request->all(); //returning value is array
+        // Album::create($input);
+        // return Redirect::to('/album')->with('success','New Album Added');
+
+        $input = $request->all();
+        $request->validate([
+            'image' => 'mimes:jpeg,png,jpg,gif,svg', 
+            
+            // 'image' => ['mimes:jpeg,png,jpg,gif,svg|
+            // file|max:512' ] -to limit
+        ]);
+
+        // if($request->hasFile('image')) {
+        if($file = $request->hasFile('image')) {
+            //para macheck kung may inupload ^^ 
+
+            $file = $request->file('image') ;
+            // $fileName = uniqid().'_'.$file->getClientOriginalName();
+  
+            $fileName = $file->getClientOriginalName();
+                 //kukuhain originalname ng photo ^^
+
+            $destinationPath = public_path().'/images' ;
+            // dd($fileName);
+    
+            $input['img_path'] = 'images/'.$fileName;
+        // }
+            $album = Album::create($input);
+            $file->move($destinationPath,$fileName);
+        }
+// dd($input);
+    }
+
+    public function show($id)
+    {
+        $albums = album::all();
+        return View::make('album.index',compact('albums'));
     }
 
     public function edit($id) {

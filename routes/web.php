@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CustomerController;
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,8 +37,11 @@ Route::get("/customer/forceDelete/{id}", ["uses" => "CustomerController@forceDel
 //Kasi nga yung CRUD OR Resource AY IISA pinagsamang CREATE SHOW/READ UPDATE DELETE yan kaya no need na siya tawagin
 //kaya nakahiwalay yung restore at forceDelete kasi di kasama yan sa CRUD 
 
-Route::resource('customer', 'CustomerController');
-Route::resource('album', 'AlbumController');
-Route::resource('artist', 'ArtistController');
-Route::resource('listener', 'ListenerController');
+Route::resource('customer', 'CustomerController')->middleware('auth');
+Route::resource('album', 'AlbumController')->middleware('auth');
+Route::resource('artist', 'ArtistController')->middleware('auth');
+Route::resource('listener', 'ListenerController')->middleware('auth');
 
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

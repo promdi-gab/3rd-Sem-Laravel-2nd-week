@@ -15,6 +15,8 @@
         <th>Artist ID</th>
         <th>Artist Name</th>
         <th>Album Name</th>
+        <th>Artist Image</th>
+     
 
         <th colspan="2">Action</th>
       </tr>
@@ -26,6 +28,12 @@
        <td>{{$artist->id}}</td>
        <td>{{$artist->artist_name}}</td>
        <td>{{$artist->album_name}}
+
+        {{-- <td><img src="{{ asset($artist->img_path) }}" /></td> --}}
+
+        <td><img src="{{ asset('storage/'.$artist->img_path) }}" /></td>
+        {{-- php artisan storage:link //para makita yung imgs--}}
+
 
       {{-- @foreach($artists as $artist)
       <tr>
