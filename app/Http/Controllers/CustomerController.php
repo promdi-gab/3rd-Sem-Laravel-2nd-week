@@ -20,13 +20,13 @@ class CustomerController extends Controller
    public function index()
     {
         // $customers = Customer::orderBy('id','DESC')->get();
-        // $customers = Customer::orderBy('id','DESC')->paginate(10);  //Paginate 1 pag 2 na lilipat na agad sa isa nakadepende kung ilan trip mo
-        $customers = Customer::withTrashed()->orderBy('customer_id','DESC')->paginate(1); //ginawa customer id kasi you know naman diba?oo
+        // $customers = Customer::orderBy('id','DESC')->paginate(10);  //Paginate 1 pag 2 na lilipat na agad sa isa 
+        $customers = Customer::withTrashed()->orderBy('customer_id','DESC')->paginate(1); 
         // dd($customers);
-        return view("customer.index", [ //HOI WAG KA GAGAMIT NG COMPACT HA AWAYIN KITA CHAROT
-            "customers" => $customers, //suggest ko mag gento ka para di ka malito same lang naman ginagawa e
-        ]); //mas trip ko gento
-       // return View::make('customer.index',compact('customer')); //tis pag binura ko yun magkakaerror seeahh oo
+        return view("customer.index", [ 
+            "customers" => $customers, 
+        ]); 
+       // return View::make('customer.index',compact('customer')); 
     }
 
     /**
@@ -36,8 +36,8 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return View::make('customer.create'); //alam mo naman toh diba?oo? tinatawag nya yung create na htmldun sa views? opo
-    } //actually mean the make of rommel is unnecessary same lang yan with or without it ill show you later.
+        return View::make('customer.create'); 
+    } 
 
     /**
      * Store a newly created resource in storage.
@@ -46,7 +46,7 @@ class CustomerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    { //so dito di pa ginamit ni nov yung ginawa nyong nilipat sa module chucuh okay? kaya nandito pa ren yan gets okok
+    { 
         $rules = [  'title' =>'required|alpha_num|min:3',
                     'lname'=>'required|alpha',
                     'fname'=>'required',
@@ -55,7 +55,7 @@ class CustomerController extends Controller
                     'town'=>'required',
                     'zipcode'=>'required'];
         
-        $validator = Validator::make($request->all(), $rules); //alam mo naman toh diba?hindi?
+        $validator = Validator::make($request->all(), $rules); 
         
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
@@ -93,9 +93,9 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-        $customer = Customer::find($id); //ito gets mo naman dibaoo
-        return view('customer.edit',compact('customer')); //tignan mo toh wala nga make e haha yuckerslaHSASAH HAHAHAHAH charot 
-    }//sakit sa mata compact di ko trip potek
+        $customer = Customer::find($id); 
+        return view('customer.edit',compact('customer'));  
+    }
     /**
      * Update the specified resource in storage.
      *

@@ -8,5 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Album extends Model
 {
     use HasFactory;
-    protected $fillable = ['album_name','artist_id', 'img_path'];
+    protected $fillable = ['album_name','artist_id','img_path'];
+
+    public function artist() {
+        return $this->belongsTo('App\Models\Artist');
+   }
+
+   public function listeners()
+	 {
+	 	return $this->belongsToMany('App\Models\Listener');
+	 }
+   
 }

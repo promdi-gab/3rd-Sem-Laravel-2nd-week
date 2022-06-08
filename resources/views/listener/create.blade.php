@@ -1,5 +1,6 @@
 @extends('layouts.base')
-@section('body')
+@extends('layouts.app')
+@section('content')
 <div class="container">
 <h2>Add new listener</h2><br/>
       <form method="post" action="{{url('listener')}}" >
@@ -16,12 +17,19 @@
           <div class="col-md-4"></div>
         <div class="form-group col-md-4">
             {{-- nakaloop --}}
-        @foreach ($albums as $id => $album) 
+        {{-- @foreach ($albums as $id => $album) 
           <div class="form-check form-check-inline">
            {!! Form::checkbox('album_id[]',$id, null, array('class'=>'form-check-input','id'=>'album')) !!} 
      {{-- checkbox,multiselection|array ^^ ,      ,   ^^check yung checkbox or hindi --}}
-           {!!Form::label('album', $album,array('class'=>'form-check-label')) !!}
+            {{-- {!!Form::label('album', $album,array('class'=>'form-check-label')) !!} --}}
 
+                {{-- new --}}
+                @foreach($albums as $album ) 
+                {{-- {{dump($album->artist->artist_name)}} --}}
+                   <div class="form-check form-check-inline">
+                     {{ Form::checkbox('album_id[]',$album->id, null, array('class'=>'form-check-input','id'=>'album')) }} 
+                      {!!Form::label('album', $album->album_name. ' by '.$album->artist->artist_name ,array('class'=>'form-check-label')) !!}
+                     
            </div>
           @endforeach 
             </div>  

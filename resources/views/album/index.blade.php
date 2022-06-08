@@ -1,6 +1,7 @@
 {{-- {{ dd($albums) }} --}}
 @extends('layouts.base')
-@section('body')
+@extends('layouts.app')
+@section('content')
 <div class="container">
        <a href="{{route('album.create')}}" class="btn btn-primary a-btn-slide-text">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -15,12 +16,15 @@
  </div>
 @endif
 
+@include('partials.search')
+
 <div class="table-responsive">
     <table class="table table-striped table-hover">
     <thead>
 <tr>
         <th>Album ID</th>
         <th>Album Name</th>
+        <th>Genre</th>
         <th>Artist Name</th>
         <th>Album cover</th>
         <th>Action</th>
@@ -34,10 +38,12 @@
       <tr>
           <td>{{$album->id}}</td>
           <td>{{$album->album_name}}</td>
+          <td>{{$album->genre}}</td>
           {{-- <td>{{$album->artist_id}}</td> --}}
-          <td>{{$album->artist_name}}</td>
+          <td>{{$album->artist->artist_name}}</td>
          {{-- nakuha sya dun sa album controller using join and db facade --}}
-
+          {{--  di siya makuha kasi kailangan may artist sa album? --}}
+          
          <td><img src="{{ asset($album->img_path) }}" /></td>
 
           {{-- <td>{{$album->genre}}</td>

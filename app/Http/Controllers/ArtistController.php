@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 Use App\Models\artist;
 Use App\Models\album;
 use Illuminate\Support\Facades\DB;
+use Laravel\Ui\Presets\React;
 
 class ArtistController extends Controller
 {
@@ -16,19 +17,61 @@ class ArtistController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $artists = DB::table('artists')
-        ->leftJoin('albums','artists.id','=','albums.artist_id')
-        //kasi nasa left?
-        ->select('artists.id','albums.album_name','artists.artist_name', 'artists.img_path')
-        //kaya nagseselect para di malito si laravel sa id(specify mo), kasi ambigous na yun
-        //sa artists id kukunin yung id hindi sa fk
-        ->get();
+        // $artists = DB::table('artists')
+        // ->leftJoin('albums','artists.id','=','albums.artist_id')
+      
+        // ->select('artists.id','albums.album_name','artists.artist_name', 'artists.img_path')
+        // //kaya nagseselect para di malito si laravel sa id(specify mo), kasi ambigous na yun
+        // //sa artists id kukunin yung id hindi sa fk
+        // ->get();
 
-        return View::make('artist.index',compact('artists'));
-    }
+        // $artists = Artist::with('albums')->get();
+    
+        // dd($artists);
+
+        // $artists = Artist::all();
+    //     foreach($artists as $artist){
+    //          dump ($artist);
+    //          dump ($artist->artist_name);
+    //     //      dump ($artist->albums); //lazy loaded
+    //     // dump ($artist->albums());
+    //     //      foreach($artist->albums as $album){
+    //     //         //  dump ($album);
+    //     //          dump ($album->album_name);
+    //     //      }
+    //          //collection si artist
+    //          //ifoforeach para makuha data
+    //          //dalawa foreach kasi
+    //    }
+
+        // return View::make('artist.index',compact('artists'));
+
+
+        ///JUNE 8============
+
+        if (empty($request->get('search'))) {
+            // $artists = Artist::with('albums')->get();
+            $artists = Artist::has('albums')->get();
+            //ifefetech yung may related album
+
+            // dd($artists);
+        }
+
+        else 
+       
+        $artists = Artist::with(['albums' => function($q) use($request){
+            $q->where("genre","=",$request->get('search'))
+                ->orWhere("album_name","LIKE", "%".$request->get('search')."%");
+            }])->where("artist_name","LIKE", "%".$request->get('search')."%")
+            ->get();
+
+            $url = 'artist';
+            return View::make('artist.index',compact('artists','url'));
+        }
+   
 
     /**
      * Show the form for creating a new resource.
@@ -131,11 +174,19 @@ class ArtistController extends Controller
         //
            //dedelete yung sa table ng album at artist
 
-        Album::where('artist_id',$id)->delete();
-        //dedelete nya muna yung children
-        //where kasi 
-        Artist::destroy($id);
-        return Redirect::to('/artist')->with('success','Artist deleted!');
-        //di pwede idelete yung parent kasi may children(sa album table)
+        // Album::where('artist_id',$id)->delete();
+        // //dedelete nya muna yung children
+        // //where kasi 
+        // Artist::destroy($id);
+        // return Redirect::to('/artist')->with('success','Artist deleted!');
+        // //di pwede idelete yung parent kasi may children(sa album table)
+
+
+        $artist = Artist::find($id);
+
+        $artist->albums()->delete();
+
+        $artist->delete();
+        $artist = Artist::with('albums')->get();
     }
 }

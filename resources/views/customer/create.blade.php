@@ -1,7 +1,7 @@
 
 @extends('layouts.base')
-@include('layouts.app')
-@section('body')
+@extends('layouts.app')
+@section('content')
 <div class="container">
    <ul class="errors">
  @foreach($errors->all() as $message)

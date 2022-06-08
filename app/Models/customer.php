@@ -18,7 +18,7 @@ class customer extends Model
     protected $primaryKey = "customer_id"; //the primary key of your table 
 
     protected $guarded = ["customer_id"]; //Ibig sabihen neto pwede di matawag sa controller kase error pag di tinawag e
-    //diba hindi naman tinatawag toh gets?okok
+    //diba hindi naman tinatawag toh
 
     public static $rules = [  'title' =>'required|alpha_num|min:3', //LOCAL RULES AND MESSAGE ONLY GOOD FOR CUSTOMER MODEL AND CONTROLLER
                     'lname'=>'required|alpha',

@@ -1,5 +1,6 @@
 @extends('layouts.base')
-@section('body')
+@extends('layouts.app')
+@section('content')
  <div class="container">
       <h2>Update listener</h2><br/>
      
@@ -19,7 +20,7 @@
         <div class="form-group col-md-4">
 
 {{-- niloloop lahat ng album --}}
-          @foreach ($albums as $album_id => $album) 
+          {{-- @foreach ($albums as $album_id => $album) 
            <div class="form-check form-check-inline">
 
             @if (in_array($album_id, $album_listener))
@@ -28,13 +29,32 @@
                 {{--  --}}
                 {!!Form::label('album', $album,array('class'=>'form-check-label')) !!}
 
-             @else
+             {{--@else
              {{-- if hindi nakita --}}
-               {!! Form::checkbox('album_id[]',$album_id, null, array('class'=>'form-check-input','id'=>'album')) !!} 
+             {{--  {!! Form::checkbox('album_id[]',$album_id, null, array('class'=>'form-check-input','id'=>'album')) !!} 
                {!!Form::label('album', $album,array('class'=>'form-check-label')) !!}
              @endif
       
-@endforeach 
+@endforeach  --}}
+
+{{-- //new --}}
+@foreach($albums as $id=> $album)
+          
+          {{-- @foreach ($listener->albums as $listener_album) --}}
+            {{-- {{dump($listener_album->album_name)}} --}}
+            @if(in_array($album,$listener_albums))
+            {{-- @if($listener_albums->album_name == $album) --}}
+              {{Form::checkbox('album_id[]',$id, true, array('class'=>'form-check-input','id'=>'album')) }} 
+              {{Form::label('album', $album,array('class'=>'form-check-label')) }}
+              @co
+ {{Form::label('album', $album,array('class'=>'form-check-label')) }}
+              @continue
+            @else
+               {{Form::checkbox('album_id[]',$id, null, array('class'=>'form-check-input','id'=>'album')) }} 
+              {{Form::label('album', $album,array('class'=>'form-check-label')) }}
+            @endif
+          @endforeach
+
         </div>  
         </div>
         <div class="row">

@@ -1,7 +1,8 @@
 {{-- using form method --}}
 
 @extends('layouts.base')
-@section('body')
+@extends('layouts.app')
+@section('content')
  <div class="container">
       <h2>Edit Album</h2><br/>
       {{-- dd($artists) --}}

@@ -1,5 +1,7 @@
 @extends('layouts.base')
-@section('body')
+@extends('layouts.app')
+@section('content')
+
 <div class="container">
     <br />
     @if ( Session::has('success'))
@@ -7,6 +9,9 @@
         <p>{{ Session::get('success') }}</p>
       </div><br />
      @endif
+
+     @include('partials.search')
+
     <table class="table table-striped">
       <tr>{{ link_to_route('artist.create', 'Add new artist:')}}</tr>
     
@@ -15,6 +20,7 @@
         <th>Artist ID</th>
         <th>Artist Name</th>
         <th>Album Name</th>
+        <th>Genre</th>
         <th>Artist Image</th>
      
 
@@ -23,11 +29,29 @@
     </thead>
  <tbody>
      {{-- dd($artists) --}}
-     @foreach($artists as $artist)
+     {{-- @foreach($artists as $artist)
      <tr>
        <td>{{$artist->id}}</td>
        <td>{{$artist->artist_name}}</td>
-       <td>{{$artist->album_name}}
+       <td>{{$artist->album_name}} --}}
+
+        @foreach($artists as $artist)
+      
+        <tr>
+          <td>{{$artist->id}}</td>
+          <td>{{$artist->artist_name}}</td>
+      
+          <td>
+          @foreach($artist->albums as $album)
+         
+            <td>
+            {{-- <li>{{$album->album_name}} </li>   --}}
+      
+           <li>{{$album->album_name}} Genre: {{$album->genre}}  </li>  
+          @endforeach
+          </td>
+
+       
 
         {{-- <td><img src="{{ asset($artist->img_path) }}" /></td> --}}
 

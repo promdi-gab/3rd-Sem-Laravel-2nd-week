@@ -1,5 +1,6 @@
 @extends('layouts.base')
-@section('body')
+@extends('layouts.app')
+@section('content')
 <div class="container">
   <h2>Edit Customer</h2>
    {{ Form::model($customer,['route' => ['customer.update',$customer->customer_id],'method'=>'PUT']) }} {{-- Alternative for shorter code di na kailangan ng CSRF at PUT dahil all in one na siya tinawag --}}
