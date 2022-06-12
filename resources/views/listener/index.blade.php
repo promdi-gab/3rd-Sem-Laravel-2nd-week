@@ -1,6 +1,6 @@
 @extends('layouts.base')
 @extends('layouts.app')
-@section('content')
+@section('body')
 
 <div class="container">
   <br />

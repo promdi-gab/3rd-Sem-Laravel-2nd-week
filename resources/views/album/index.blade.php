@@ -1,7 +1,7 @@
 {{-- {{ dd($albums) }} --}}
 @extends('layouts.base')
 @extends('layouts.app')
-@section('content')
+@section('body')
 <div class="container">
        <a href="{{route('album.create')}}" class="btn btn-primary a-btn-slide-text">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>

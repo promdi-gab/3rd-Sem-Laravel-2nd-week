@@ -1,6 +1,6 @@
 @extends('layouts.base')
 @extends('layouts.app')
-@section('content')
+@section('body')
   <div class="container">
        <a href="{{route('customer.create')}}" class="btn btn-primary a-btn-slide-text"> {{-- ALTERNATIVE: customer/create --}}
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>

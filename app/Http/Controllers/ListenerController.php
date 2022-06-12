@@ -120,7 +120,7 @@ class ListenerController extends Controller
         $input = $request->all();
         // dd($request->album_id);
         $listener = Listener::create($input);
-        if (empty($request->album_id)) {
+        if (!(empty($request->album_id))) {
             foreach ($request->album_id as $album_id) {
                 // DB::table('album_listener')->insert(
                 //     ['album_id' => $album_id, 
