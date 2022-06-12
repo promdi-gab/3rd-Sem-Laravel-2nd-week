@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
-Use App\Models\artist;
-Use App\Models\album;
-Use App\Models\listener;
+use App\Models\artist;
+use App\Models\album;
+use App\Models\listener;
 
 class ListenerController extends Controller
 {
@@ -19,41 +19,28 @@ class ListenerController extends Controller
      */
     public function index(Request $request)
     {
-        //
-        // $listeners = DB::table('listeners')
-        //                 ->leftJoin('album_listener','listeners.id','=','album_listener.listener_id')
-        //                 ->leftJoin('albums','albums.id','=','album_listener.album_id')
-        //                 ->select('listeners.id','listeners.listener_name','albums.album_name')
-        //                 ->get();
-       // return View::make('listener.index',compact('listeners'));
+        if (empty($request->get('search'))) {
+            $listeners = Listener::with('albums')->get();
+        } else {
+            // $listeners = Listener::with(['albums' => function ($q) use ($request) {
+            //     $q->where("album_name", "LIKE", "%" . $request->get('search') . "%")
+            //         ->orWhere("genre", "LIKE", "%" . $request->get('search') . "%");
+            // }])->orWhere('listener_name', "LIKE", "%" . $request->get('search') . "%")
+            //     ->get();
 
-       //JUNE 8=======
-       if (empty($request->get('search'))) {
-        $listeners = Listener::with('albums')->get();
+            // ? Difference of has and with has don't use eager loading but can check relationships
+
+            $listeners = Listener::whereHas('albums', function ($q) use ($request) {
+                $q->where("album_name", "LIKE", "%" . $request->get('search') . "%")
+                    ->orWhere("genre", "LIKE", "%" . $request->get('search') . "%");
+            })->orWhere('listener_name', "LIKE", "%" . $request->get('search') . "%")
+                ->get();
+        }
+
+        $url = 'listener';
+
+        return View::make('listener.index', compact('listeners', 'url'));
     }
-
-    else {
-// $listeners = Listener::with(['albums' =>function($q) use($request){
-//           $q->where("album_name","LIKE", "%".$request->get('search')."%");
-//             }])
-//             ->get();
-// $listeners = Listener::with(['albums' =>function($q) use($request){
-         //  $q->orWhere("album_name","LIKE", "%".$request->get('search')."%");
-         //    }])->orWhere('listener_name',"LIKE", "%".$request->get('search')."%")->get();
-
-
-$listeners = Listener::whereHas('albums', function($q) use($request){
-          $q->where("album_name","LIKE", "%".$request->get('search')."%")
-            ->orWhere("album_name","LIKE", "%".$request->get('search')."%");
-            })->orWhere('listener_name',"LIKE", "%".$request->get('search')."%")
-        ->get();
-    }
-
-    $url = 'listener';
-
-   return View::make('listener.index',compact('listeners','url'));
-    
-}
     /**
      * Show the form for creating a new resource.
      *
@@ -73,8 +60,7 @@ $listeners = Listener::whereHas('albums', function($q) use($request){
         // foreach($albums as $album ) {
         //     dump($album->artist->artist_name);
         // }
-        return View::make('listener.create',compact('albums'));
-
+        return View::make('listener.create', compact('albums'));
     }
 
     /**
@@ -100,7 +86,7 @@ $listeners = Listener::whereHas('albums', function($q) use($request){
         // //create kung same name ^^
 
         // // dd($request->album_id); 
-        
+
         // // if(empty($request->album_id))
         // if($request->album_id) {
         //     //array yung album_id, 
@@ -134,19 +120,19 @@ $listeners = Listener::whereHas('albums', function($q) use($request){
         $input = $request->all();
         // dd($request->album_id);
         $listener = Listener::create($input);
-        if(empty($request->album_id)){
-        foreach ($request->album_id as $album_id) {
-            // DB::table('album_listener')->insert(
-            //     ['album_id' => $album_id, 
-            //      'listener_id' => $listener->id]
-            //     );
-            // dd($listener->albums());
-            $listener->albums()->attach($album_id);
-        }  //end foreach
+        if (empty($request->album_id)) {
+            foreach ($request->album_id as $album_id) {
+                // DB::table('album_listener')->insert(
+                //     ['album_id' => $album_id, 
+                //      'listener_id' => $listener->id]
+                //     );
+                // dd($listener->albums());
+                $listener->albums()->attach($album_id);
+            }  //end foreach
 
+        }
+        return Redirect::to('listener')->with('success', 'New listener added!');
     }
-    return Redirect::to('listener')->with('success','New listener added!');
-}
 
     /**
      * Display the specified resource.
@@ -171,7 +157,7 @@ $listeners = Listener::whereHas('albums', function($q) use($request){
         //
 
         // $listener = Listener::find($id);
-        
+
         // $album_listener = DB::table('album_listener')
         //                     ->where('listener_id',$id)
         //                     // listener_id = $id
@@ -192,7 +178,7 @@ $listeners = Listener::whereHas('albums', function($q) use($request){
         //kapag get object na nasa array, first- model
 
         // $listener = Listener::find($id);
-        
+
         // $album_listener = DB::table('album_listener')
         //                     ->where('listener_id',$id)
         //                     ->pluck('album_id')
@@ -210,24 +196,24 @@ $listeners = Listener::whereHas('albums', function($q) use($request){
         // $albums = Album::with('artist')->where('id',$id)->take(1)->get();
         // dd($albums);
 
-            // dump($listener);
-            // dump($listener->listener_name);
-            // dump($listener->albums);
-            // foreach ($listener->albums as $album) {
-            //      dump($album->album_name);
-            //     }
+        // dump($listener);
+        // dump($listener->listener_name);
+        // dump($listener->albums);
+        // foreach ($listener->albums as $album) {
+        //      dump($album->album_name);
+        //     }
         //$artist
 
-        if(!(empty($listener->albums))){
-            foreach($listener->albums as $listener_album){
+        if (!(empty($listener->albums))) {
+            foreach ($listener->albums as $listener_album) {
                 $listener_albums[$listener_album->id] = $listener_album->album_name;
             }
         }
 
-        $albums = Album::pluck('album_name','id')->toArray();
+        $albums = Album::pluck('album_name', 'id')->toArray();
         // dd($albums, $listener_albums);
 
-// else {
+        // else {
         //     // $listener_albums[] = null;
         // }
         // $albums = Album::pluck('album_name','id')->toArray();
@@ -240,8 +226,8 @@ $listeners = Listener::whereHas('albums', function($q) use($request){
         //     }
         //     else
         //         dump($albums);
-            
-        return View::make('listener.edit',compact('albums','listener','listener_albums'));
+
+        return View::make('listener.edit', compact('albums', 'listener', 'listener_albums'));
         //model yung listener, array yung album_listener
 
     }
@@ -256,42 +242,42 @@ $listeners = Listener::whereHas('albums', function($q) use($request){
     public function update(Request $request, $id)
     {
         //
-//         $listener = Listener::find($id);
-//         // dd($request->input('album_id'));
-//         $album_ids = $request->album_id;
-//         //pwede request, pwede rin input
+        //         $listener = Listener::find($id);
+        //         // dd($request->input('album_id'));
+        //         $album_ids = $request->album_id;
+        //         //pwede request, pwede rin input
 
-//         // dd($album_ids);
-//         if(empty($album_ids)){
-//             //kapag walang sinubmit, idedelete nya
+        //         // dd($album_ids);
+        //         if(empty($album_ids)){
+        //             //kapag walang sinubmit, idedelete nya
 
-//             // DB::table('album_listener')
-//             // //walang model yung pivot table
+        //             // DB::table('album_listener')
+        //             // //walang model yung pivot table
 
-//             //     ->where('listener_id',$id)
-//             //     ->delete();
-                
-//         } 
+        //             //     ->where('listener_id',$id)
+        //             //     ->delete();
 
-// //dedelete nya kapag inuncheck mo
-//         else {    
-//             DB::table('album_listener')
-//                 ->where('listener_id',$id)
-//                 ->delete();
-//     foreach($album_ids as $album_id) {
-//             DB::table('album_listener')
-//                 ->insert(['album_id' => $album_id,
-//                           'listener_id' => $id
-//                         ]); 
-//         }
-//     }
+        //         } 
 
-//     $listener->update($request->all());
+        // //dedelete nya kapag inuncheck mo
+        //         else {    
+        //             DB::table('album_listener')
+        //                 ->where('listener_id',$id)
+        //                 ->delete();
+        //     foreach($album_ids as $album_id) {
+        //             DB::table('album_listener')
+        //                 ->insert(['album_id' => $album_id,
+        //                           'listener_id' => $id
+        //                         ]); 
+        //         }
+        //     }
 
-    //new
-    $listener = Listener::find($id);
-       $album_ids = $request->input('album_id');
-       $listener->albums()->sync($album_ids);
+        //     $listener->update($request->all());
+
+        //new
+        $listener = Listener::find($id);
+        $album_ids = $request->input('album_id');
+        $listener->albums()->sync($album_ids);
         // dd($album_ids);
         // if(empty($album_ids)){
         //     $listener->albums()->detach();
@@ -299,16 +285,15 @@ $listeners = Listener::whereHas('albums', function($q) use($request){
         // else {
         //     // foreach($album_ids as $album_id) {
         //     $listener->albums()->detach();
-            
+
         //     $listener->albums()->attach($album_ids);
 
-            
+
         //     // }
         // }
-$listener->update($request->all());
-       
-        return Redirect::route('listener.index')->with('success','listener updated!');
+        $listener->update($request->all());
 
+        return Redirect::route('listener.index')->with('success', 'listener updated!');
     }
 
     /**
@@ -323,9 +308,9 @@ $listener->update($request->all());
         $listener = Listener::find($id);
         $listener->albums()->detach();
         // DB::table('album_listener')->where('listener_id',$id)->delete();
-        
+
         $listener->delete();
-     //   return Redirect::route('listener')->with('success','listener deleted!');
-        return Redirect::to('listener.index')->with('success','New listener deleted!');
+        //   return Redirect::route('listener')->with('success','listener deleted!');
+        return Redirect::to('listener.index')->with('success', 'New listener deleted!');
     }
 }

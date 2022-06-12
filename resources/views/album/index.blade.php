@@ -26,6 +26,7 @@
         <th>Album Name</th>
         <th>Genre</th>
         <th>Artist Name</th>
+        <th>Listener</th>
         <th>Album cover</th>
         <th>Action</th>
       
@@ -40,7 +41,12 @@
           <td>{{$album->album_name}}</td>
           <td>{{$album->genre}}</td>
           {{-- <td>{{$album->artist_id}}</td> --}}
+          {{-- Difference bakit naka for each yung listener kasi may foreign key artist listener wala kaya manu mano mo tatawagin via for each kasi nakadependent sila sa bridge table --}}
           <td>{{$album->artist->artist_name}}</td>
+
+          @foreach($album->listeners as $listener)
+          <td>{{$listener->listener_name}}</td>
+          @endforeach
          {{-- nakuha sya dun sa album controller using join and db facade --}}
           {{--  di siya makuha kasi kailangan may artist sa album? --}}
           

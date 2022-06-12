@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
-Use App\Models\artist;
-Use App\Models\album;
+use App\Models\artist;
+use App\Models\album;
 use Illuminate\Support\Facades\DB;
 use Laravel\Ui\Presets\React;
 
@@ -19,59 +19,26 @@ class ArtistController extends Controller
      */
     public function index(Request $request)
     {
-        //
-        // $artists = DB::table('artists')
-        // ->leftJoin('albums','artists.id','=','albums.artist_id')
-      
-        // ->select('artists.id','albums.album_name','artists.artist_name', 'artists.img_path')
-        // //kaya nagseselect para di malito si laravel sa id(specify mo), kasi ambigous na yun
-        // //sa artists id kukunin yung id hindi sa fk
-        // ->get();
-
-        // $artists = Artist::with('albums')->get();
-    
-        // dd($artists);
-
-        // $artists = Artist::all();
-    //     foreach($artists as $artist){
-    //          dump ($artist);
-    //          dump ($artist->artist_name);
-    //     //      dump ($artist->albums); //lazy loaded
-    //     // dump ($artist->albums());
-    //     //      foreach($artist->albums as $album){
-    //     //         //  dump ($album);
-    //     //          dump ($album->album_name);
-    //     //      }
-    //          //collection si artist
-    //          //ifoforeach para makuha data
-    //          //dalawa foreach kasi
-    //    }
-
-        // return View::make('artist.index',compact('artists'));
-
-
-        ///JUNE 8============
 
         if (empty($request->get('search'))) {
             // $artists = Artist::with('albums')->get();
-            $artists = Artist::has('albums')->get();
+            $artists = Artist::with('albums')->get();
             //ifefetech yung may related album
 
             // dd($artists);
-        }
+        } else
+            $artists = Artist::with(['albums' => function ($q) use ($request) {
+                $q->where("genre", "=", $request->get('search'))
+                    // ! titignan muna kaya naka array if existing yung genre pag wala hindi na agad lalabas
+                    ->orWhere("album_name", "LIKE", "%" . $request->get('search') . "%");
+                // ? or kung anu man nilagay mo na may genre
+            }])->where("artist_name", "LIKE", "%" . $request->get('search') . "%")
+                ->get();
 
-        else 
-       
-        $artists = Artist::with(['albums' => function($q) use($request){
-            $q->where("genre","=",$request->get('search'))
-                ->orWhere("album_name","LIKE", "%".$request->get('search')."%");
-            }])->where("artist_name","LIKE", "%".$request->get('search')."%")
-            ->get();
+        $url = 'artist';
+        return View::make('artist.index', compact('artists', 'url'));
+    }
 
-            $url = 'artist';
-            return View::make('artist.index',compact('artists','url'));
-        }
-   
 
     /**
      * Show the form for creating a new resource.
@@ -99,22 +66,22 @@ class ArtistController extends Controller
         // return Redirect::to('artist/index');
 
         // $input = $request->all();
-       
+
         $input = $request->all();
         $request->validate([
             'image' => 'mimes:jpeg,png,jpg,gif,svg',
         ]);
 
-        if($file = $request->hasFile('image')) {
-            
-            $file = $request->file('image') ;
-            $fileName = uniqid().'_'.$file->getClientOriginalName();
+        if ($file = $request->hasFile('image')) {
+
+            $file = $request->file('image');
+            $fileName = uniqid() . '_' . $file->getClientOriginalName();
             // $fileName = $file->getClientOriginalName();
             // dd($fileName);
             $request->image->storeAs('images', $fileName, 'public');
             //
 
-            $input['img_path'] = 'images/'.$fileName;
+            $input['img_path'] = 'images/' . $fileName;
             $Artist = Artist::create($input);
             // $file->move($destinationPath,$fileName);
         }
@@ -131,7 +98,7 @@ class ArtistController extends Controller
     public function show($id)
     {
         $artists = Artist::all();
-        return View::make('artist.index',compact('artists'));
+        return View::make('artist.index', compact('artists'));
     }
 
     /**
@@ -144,8 +111,8 @@ class ArtistController extends Controller
     {
         //
         $artist = Artist::find($id);
-        
-	    return View::make('artist.edit',compact('artist'));
+
+        return View::make('artist.edit', compact('artist'));
     }
 
     /**
@@ -158,9 +125,9 @@ class ArtistController extends Controller
     public function update(Request $request, $id)
     {
         //
-     $artist = Artist::find($id);
-     $artist->update($request->all());
-     return Redirect::to('/artist')->with('success','Artist updated!');
+        $artist = Artist::find($id);
+        $artist->update($request->all());
+        return Redirect::to('/artist')->with('success', 'Artist updated!');
     }
 
     /**
@@ -172,7 +139,7 @@ class ArtistController extends Controller
     public function destroy($id)
     {
         //
-           //dedelete yung sa table ng album at artist
+        //dedelete yung sa table ng album at artist
 
         // Album::where('artist_id',$id)->delete();
         // //dedelete nya muna yung children

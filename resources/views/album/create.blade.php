@@ -32,6 +32,11 @@
       <label for="image" class="control-label">Album Cover</label>
       <input type="file" class="form-control" id="image" name="image" >
 
+      <div class="form-group">
+        <label for="genre" class="control-label">Genre</label>
+        <input type="text" class="form-control" id="genre" name="genre">
+      </div>
+
        @error('image') {{-- kapag may error  --}}
       <div class="alert alert-danger">{{ $message }}</div>
       @enderror

@@ -20,7 +20,6 @@
         <th>Artist ID</th>
         <th>Artist Name</th>
         <th>Album Name</th>
-        <th>Genre</th>
         <th>Artist Image</th>
      
 
@@ -41,15 +40,12 @@
           <td>{{$artist->id}}</td>
           <td>{{$artist->artist_name}}</td>
       
-          <td>
           @foreach($artist->albums as $album)
          
-            <td>
             {{-- <li>{{$album->album_name}} </li>   --}}
       
-           <li>{{$album->album_name}} Genre: {{$album->genre}}  </li>  
+           <td>{{$album->album_name}} Genre: {{$album->genre}}  </td>  
           @endforeach
-          </td>
 
        
 

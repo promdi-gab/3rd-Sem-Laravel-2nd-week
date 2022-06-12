@@ -3,17 +3,17 @@
 @section('content')
 
 <div class="container">
-<br />
-    @if ( Session::has('success'))
-      <div class="alert alert-success">
-        <p>{{ Session::get('success') }}</p>
-      </div><br />
-     @endif
-     
-     @include('partials.search')
-     
-<table class="table table-striped">
-      <tr>{{ link_to_route('listener.create', 'Add new listener:')}}</tr>
+  <br />
+  @if ( Session::has('success'))
+  <div class="alert alert-success">
+    <p>{{ Session::get('success') }}</p>
+  </div><br />
+  @endif
+
+  @include('partials.search')
+
+  <table class="table table-striped">
+    <tr>{{ link_to_route('listener.create', 'Add new listener:')}}</tr>
     <thead>
       <tr>
         <th>listener ID</th>
@@ -24,29 +24,32 @@
         <th colspan="2">Action</th>
       </tr>
     </thead>
-<tbody>
+    <tbody>
 
       @foreach($listeners as $listener)
-        <td>{{$listener->id}}</td>
-        <td>{{$listener->listener_name}}</td>
-        <td>{{$listener->artist_name}}</td>
-        <li>{{$listener->album_name}} </li>
-        <td>
+      <td>{{$listener->id}}</td>
+      <td>{{$listener->listener_name}}</td>
+      {{-- @foreach($listener->artists as $artist) --}}
 
-          </td>
+      @foreach($listener->albums as $album)
+      <td>{{$album->artist->artist_name}}</td>
+      <td>{{$album->album_name}} Genre: {{$album->genre}} </td>
 
-<td><a href="{{action('ListenerController@edit', $listener->id)}}" class="btn btn-warning">Edit</a></td>
-       <td>
-          <form action=" {{action('ListenerController@destroy', $listener->id)}}" method="post">
-           {{ csrf_field() }}
-            <input name="_method" type="hidden" value="DELETE">
-            {{-- hidden field ^^ --}}
-            <button class="btn btn-danger" type="submit">Delete</button>
-          </form>
-        </td>
+        @endforeach
+        {{-- @endforeach --}}
+
+      <td><a href="{{action('ListenerController@edit', $listener->id)}}" class="btn btn-warning">Edit</a></td>
+      <td>
+        <form action=" {{action('ListenerController@destroy', $listener->id)}}" method="post">
+          {{ csrf_field() }}
+          <input name="_method" type="hidden" value="DELETE">
+          {{-- hidden field ^^ --}}
+          <button class="btn btn-danger" type="submit">Delete</button>
+        </form>
+      </td>
       </tr>
       @endforeach
-  </tbody>
+    </tbody>
   </table>
-  </div>
-  @endsection
+</div>
+@endsection
