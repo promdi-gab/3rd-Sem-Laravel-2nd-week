@@ -9,6 +9,8 @@ use App\Models\artist;
 use App\Models\album;
 use Illuminate\Support\Facades\DB;
 use Laravel\Ui\Presets\React;
+use App\DataTables\ArtistsDataTable;
+use Log;
 
 class ArtistController extends Controller
 {
@@ -21,8 +23,8 @@ class ArtistController extends Controller
     {
 
         if (empty($request->get('search'))) {
-            // $artists = Artist::with('albums')->get();
             $artists = Artist::with('albums')->get();
+            // $artists = Artist::has('albums')->get();
             //ifefetech yung may related album
 
             // dd($artists);
@@ -97,8 +99,9 @@ class ArtistController extends Controller
      */
     public function show($id)
     {
-        $artists = Artist::all();
-        return View::make('artist.index', compact('artists'));
+        $artist = Artist::find($id);
+        // dd($artist);
+        return view('artist.show', compact('artist'));
     }
 
     /**
@@ -155,5 +158,10 @@ class ArtistController extends Controller
 
         $artist->delete();
         $artist = Artist::with('albums')->get();
+    }
+
+    public function getArtists(ArtistsDataTable $dataTable) {
+        // dd($dataTable);
+        return $dataTable->render('artist.artist');
     }
 }

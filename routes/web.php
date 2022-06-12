@@ -14,18 +14,18 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/album','AlbumController@index');
+Route::get('/album', 'AlbumController@index');
 
-Route::get('/listener','ListenerController@index');
+Route::get('/listener', 'ListenerController@index');
 
-Route::get('/album/create','AlbumController@create')->name('album.create'); // option1
+Route::get('/album/create', 'AlbumController@create')->name('album.create'); // option1
 
-Route::post('/album/store',['uses' => 'AlbumController@store','as' => 'album.store']); //option2
-Route::get('/album/edit/{id}','AlbumController@edit')->name('album.edit');
+Route::post('/album/store', ['uses' => 'AlbumController@store', 'as' => 'album.store']); //option2
+Route::get('/album/edit/{id}', 'AlbumController@edit')->name('album.edit');
 
-Route::post('/album/update{id}',['uses' => 'AlbumController@update','as' => 'album.update']); 
+Route::post('/album/update{id}', ['uses' => 'AlbumController@update', 'as' => 'album.update']);
 
-Route::get('/album/delete/{id}',['uses' => 'AlbumController@delete','as' => 'album.delete']);
+Route::get('/album/delete/{id}', ['uses' => 'AlbumController@delete', 'as' => 'album.delete']);
 
 Route::resource('customer', 'CustomerController');
 
@@ -44,15 +44,14 @@ Route::resource('customer', 'CustomerController');
 // Route::resource('artist', 'ArtistController')->middleware('auth');
 // Route::resource('listener', 'ListenerController')->middleware('auth');
 
-Route::group(['middleware' => ['auth']], function () { 
-    Route::get('/customer/restore/{id}','CustomerController@restore')->name('customer.restore');
-    Route::get('/customer/forceDelete/{id}', 'CustomerController@forceDelete')->name('customer.forceDelete');
+Route::group(['middleware' => ['auth']], function () {
+	Route::get('/customer/restore/{id}', 'CustomerController@restore')->name('customer.restore');
+	Route::get('/customer/forceDelete/{id}', 'CustomerController@forceDelete')->name('customer.forceDelete');
 
-	Route::resource('customer','CustomerController');
-	Route::resource('album','AlbumController');
-	Route::resource('artist','ArtistController');
-	Route::resource('listener','ListenerController');
-
+	Route::resource('customer', 'CustomerController');
+	Route::resource('album', 'AlbumController');
+	Route::resource('artist', 'ArtistController');
+	Route::resource('listener', 'ListenerController');
 });
 
 Auth::routes();
@@ -62,22 +61,44 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //JUNE 8======
 Route::get('/listener/{search?}', [
 	'uses' => 'ListenerController@index',
-	 'as' => 'listener.index'
-  ]);
+	'as' => 'listener.index'
+]);
 
 Route::get('/artist/{search?}', [
 	'uses' => 'ArtistController@index',
-	 'as' => 'artist.index'
-  ]);
+	'as' => 'artist.index'
+]);
 
 Route::get('/album/{search?}', [
 	'uses' => 'AlbumController@index',
-	 'as' => 'album.index'
-  ]);
+	'as' => 'album.index'
+]);
 
-Route::resource('artist', 'ArtistController')->except(['index','artist']);
+
+Route::get('/search/{search?}', ['uses' => 'SearchController@search', 'as' => 'search']);
+
+Route::get('/show-artist/{id}', [
+	'uses' => 'ArtistController@show',
+	'as' => 'getArtist'
+]);
+
+Route::get('/artists', [
+      'uses' => 'ArtistController@getArtists',
+       'as' => 'getArtists'
+    ]);
+
+Route::get('/show-album/{id}', [
+	'uses' => 'AlbumController@show',
+	'as' => 'getAlbum'
+]);
+
+Route::get('/show-listener/{id}', [
+	'uses' => 'ListenerController@show',
+	'as' => 'getListener'
+]);
+
+Route::resource('artist', 'ArtistController')->except(['index', 'artist']);
 
 Route::resource('album', 'AlbumController')->except(['index']);
 
 Route::resource('listener', 'ListenerController')->except(['index']);
-
